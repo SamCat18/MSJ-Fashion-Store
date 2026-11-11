@@ -1,0 +1,50 @@
+/* Páginas de contenido: legales y Libro de Reclamaciones. Reutiliza los tokens de styles.css / msj.css. */
+.page-topbar{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:16px 5%;border-bottom:1px solid #e2ddd3;background:var(--paper)}
+.page-topbar nav{display:flex;gap:18px;flex-wrap:wrap;font-size:11px;text-transform:uppercase;letter-spacing:.4px}
+.page-topbar nav a:hover{color:var(--gold-deep)}
+.page-shell{max-width:860px;margin:0 auto;padding:44px 20px 72px}
+.page-shell h1{font:500 clamp(30px,5vw,42px)/1.1 var(--serif);margin:0 0 10px}
+.page-lead{font-size:14px;color:var(--muted);margin:0 0 28px;line-height:1.7}
+.page-toc{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 34px}
+.page-toc a{padding:9px 14px;background:#ede9e1;font-size:11px;text-transform:uppercase;letter-spacing:.4px}
+.page-toc a:hover{background:var(--gold);color:#fff}
+.legal-section{padding:28px 0;border-top:1px solid var(--line);scroll-margin-top:16px}
+.legal-section h2{font:500 25px var(--serif);margin:0 0 14px}
+.legal-section h3{font-size:14px;margin:20px 0 6px}
+.legal-section p,.legal-section li{font-size:14px;line-height:1.75;color:#3b3934}
+.legal-section ul{padding-left:20px}
+.draft-banner{padding:14px 16px;margin:0 0 26px;background:#f4ebd9;border-left:3px solid #a77a32;font-size:13px;line-height:1.6;color:#504328}
+.draft-banner[hidden]{display:none}
+.fill{background:#f4ebd9;padding:0 4px}
+.page-footer{padding:22px 5%;background:#171715;color:#c9c6bd;font-size:12px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px}
+.page-footer a{color:#d3c49d}
+
+/* Libro de Reclamaciones */
+.complaint-sheet{border:1px solid var(--line);background:#fbfaf7}
+.sheet-header{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;padding:18px 20px;border-bottom:1px solid var(--line);background:#f4f0e8}
+.sheet-header h2{font:500 20px var(--serif);margin:0 0 4px}
+.sheet-header p{margin:0;font-size:12px;color:var(--muted);line-height:1.6}
+.sheet-block{padding:18px 20px;border-bottom:1px solid var(--line)}
+.sheet-block legend,.sheet-block h3{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--gold-deep);margin:0 0 12px;padding:0}
+fieldset.sheet-block{margin:0;border:0;border-bottom:1px solid var(--line);min-width:0}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:4px 16px}
+.form-grid .wide{grid-column:1/-1}
+.form-grid .form-field{margin:8px 0}
+.choice-row{display:flex;flex-wrap:wrap;gap:10px}
+.choice{display:flex;align-items:flex-start;gap:9px;flex:1 1 240px;padding:12px;border:1px solid var(--line);background:#fff;font-size:13px;line-height:1.5;cursor:pointer}
+.choice input{margin-top:3px;accent-color:var(--green)}
+.choice small{display:block;color:var(--muted);font-size:11.5px}
+.sheet-actions{padding:18px 20px}
+.sheet-actions .primary-button{max-width:320px}
+.legal-notes{font-size:12px;line-height:1.7;color:var(--muted);margin-top:22px}
+.receipt{border:1px solid var(--line);background:#fff;padding:26px}
+.receipt[hidden]{display:none}
+.receipt h2{font:500 26px var(--serif);margin:0 0 6px}
+.receipt-code{display:inline-block;margin:10px 0 18px;padding:10px 16px;background:#171715;color:#f1e6c8;font:600 18px 'DM Sans',sans-serif;letter-spacing:1px}
+.receipt dl{display:grid;grid-template-columns:200px 1fr;gap:8px 16px;font-size:13px;margin:0 0 20px}
+.receipt dt{color:var(--muted)}
+.receipt dd{margin:0;white-space:pre-wrap;overflow-wrap:anywhere}
+.receipt-actions{display:flex;gap:10px;flex-wrap:wrap}
+.receipt-actions>*{width:auto;flex:0 1 220px}
+@media(max-width:650px){.form-grid{grid-template-columns:1fr}.receipt dl{grid-template-columns:1fr}.receipt dt{margin-top:6px}.page-topbar .wordmark{font-size:26px}}
+@media print{.page-topbar,.page-footer,.receipt-actions,.complaint-intro,#complaint-form{display:none!important}.page-shell{padding:0}.receipt{border:0}}

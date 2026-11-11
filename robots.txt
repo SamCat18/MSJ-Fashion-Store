@@ -1,0 +1,7 @@
+User-agent: *
+Disallow: /admin.html
+Disallow: /backup-panel.html
+Disallow: /database/
+Disallow: /scripts/
+Disallow: /supabase/
+Disallow: /backups/

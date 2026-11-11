@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f3f0e9">
+  <title>Libro de Reclamaciones | MSJ Fashion Store</title>
+  <meta name="description" content="Libro de Reclamaciones virtual de MSJ Fashion Store, conforme al Código de Protección y Defensa del Consumidor.">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%23171715'/%3E%3Ctext x='32' y='41' font-family='Georgia,serif' font-size='24' fill='%23c0a56d' text-anchor='middle'%3EMSJ%3C/text%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="msj.css">
+  <link rel="stylesheet" href="store-plus.css">
+  <link rel="stylesheet" href="catalog.css"><link rel="stylesheet" href="support.css"><link rel="stylesheet" href="shop.css">
+  <link rel="stylesheet" href="pages.css"><link rel="stylesheet" href="msj-2026.css?v=20261111">
+</head>
+<body data-page="content">
+  <div id="site-header"></div>
+  <script src="config.js"></script><script src="catalog-data.js"></script><script src="layout.js"></script><script src="campaigns.js"></script><script src="ui-2026.js?v=20261111"></script><script src="search-engine.js?v=20261111"></script>
+  <main class="page-shell" id="main">
+    <div class="complaint-intro">
+      <p class="eyebrow">ATENCIÓN AL CONSUMIDOR</p>
+      <h1>📖 Libro de Reclamaciones</h1>
+      <p class="page-lead">Conforme al Código de Protección y Defensa del Consumidor (Ley N.º 29571), ponemos a tu disposición esta hoja de reclamación virtual. Al enviarla recibirás un código y una constancia que podrás imprimir o guardar.</p>
+      <div class="draft-banner" id="draft-banner" hidden><strong>Datos del proveedor pendientes.</strong> Completa razón social, RUC, domicilio y correo en <code>config.js</code> para que aparezcan en cada hoja.</div>
+    </div>
+
+    <form class="complaint-sheet" id="complaint-form" novalidate>
+      <div class="sheet-header"><div><h2>Hoja de reclamación virtual</h2><p><span data-business="legalName"></span> · RUC <span data-business="ruc"></span><br><span data-business="address"></span></p></div><p>Fecha: <strong id="complaint-date"></strong></p></div>
+
+      <fieldset class="sheet-block"><legend>1. Identificación del consumidor reclamante</legend><div class="form-grid">
+        <label class="form-field wide"><span>Nombre completo *</span><input name="consumer_name" required minlength="2" maxlength="120" autocomplete="name"></label>
+        <label class="form-field"><span>Tipo de documento *</span><select name="document_type" required><option value="DNI">DNI</option><option value="CE">Carné de extranjería</option><option value="Pasaporte">Pasaporte</option><option value="RUC">RUC</option></select></label>
+        <label class="form-field"><span>Número de documento *</span><input name="document_number" required minlength="6" maxlength="20" autocomplete="off"></label>
+        <label class="form-field wide"><span>Domicilio *</span><input name="address" required minlength="5" maxlength="300" autocomplete="street-address"></label>
+        <label class="form-field"><span>Correo electrónico *</span><input name="email" type="email" required maxlength="160" autocomplete="email"></label>
+        <label class="form-field"><span>Teléfono</span><input name="phone" type="tel" maxlength="30" autocomplete="tel"></label>
+        <label class="form-field wide"><span>Si eres menor de edad: nombre de tu padre, madre o apoderado</span><input name="guardian_name" maxlength="120"></label>
+      </div></fieldset>
+
+      <fieldset class="sheet-block"><legend>2. Identificación del bien contratado</legend><div class="form-grid">
+        <div class="wide choice-row"><label class="choice"><input type="radio" name="item_type" value="producto" checked> <span>Producto</span></label><label class="choice"><input type="radio" name="item_type" value="servicio"> <span>Servicio</span></label></div>
+        <label class="form-field wide"><span>Descripción *</span><input name="item_description" required minlength="3" maxlength="300" placeholder="Ej.: Camisa Oxford talla M, color blanco"></label>
+        <label class="form-field"><span>Monto reclamado (S/)</span><input name="amount" type="number" min="0" step="0.01" inputmode="decimal"></label>
+        <label class="form-field"><span>N.º de pedido</span><input name="order_reference" maxlength="40" placeholder="Ej.: 3F9A12BC"></label>
+      </div></fieldset>
+
+      <fieldset class="sheet-block"><legend>3. Detalle de la reclamación</legend>
+        <div class="choice-row"><label class="choice"><input type="radio" name="kind" value="reclamo" checked> <span><strong>Reclamo</strong><small>Disconformidad relacionada con los productos o servicios.</small></span></label><label class="choice"><input type="radio" name="kind" value="queja"> <span><strong>Queja</strong><small>Malestar respecto a la atención al público, no relacionado con el producto.</small></span></label></div>
+        <label class="form-field"><span>Detalle *</span><textarea name="detail" required minlength="10" maxlength="2000" rows="5"></textarea></label>
+        <label class="form-field"><span>Pedido del consumidor *</span><textarea name="consumer_request" required minlength="5" maxlength="1000" rows="3" placeholder="¿Qué solución esperas?"></textarea></label>
+      </fieldset>
+
+      <div class="sheet-actions">
+        <label class="consent-check"><input type="checkbox" name="accepted" required> <span>Declaro que los datos son verdaderos y acepto su tratamiento para atender esta reclamación, según la <a href="legal.html#privacidad" target="_blank">política de privacidad</a>.</span></label>
+        <p class="form-error" id="complaint-error" role="alert"></p>
+        <button class="primary-button" id="complaint-submit">Enviar hoja de reclamación</button>
+      </div>
+    </form>
+
+    <section class="receipt" id="complaint-receipt" hidden tabindex="-1" aria-live="polite">
+      <p class="eyebrow">CONSTANCIA DE REGISTRO</p>
+      <h2>Tu hoja fue registrada</h2>
+      <p><strong>Proveedor:</strong> <span data-business="legalName"></span> · RUC <span data-business="ruc"></span> · <span data-business="address"></span></p>
+      <p>Guarda este código para cualquier seguimiento. También enviaremos la respuesta al correo que indicaste.</p>
+      <span class="receipt-code" id="receipt-code"></span>
+      <dl id="receipt-details"></dl>
+      <div class="receipt-actions"><button class="primary-button" id="print-receipt">Imprimir o guardar PDF</button><a class="secondary-button" href="index.html">Volver a la tienda</a></div>
+    </section>
+
+    <div class="legal-notes">
+      <p>* Campos obligatorios.</p>
+      <p>La formulación del reclamo no impide acudir a otras vías de solución de controversias ni es requisito previo para interponer una denuncia ante el INDECOPI.</p>
+      <p>El proveedor deberá dar respuesta al reclamo o queja en un plazo no mayor a quince (15) días hábiles.</p>
+    </div>
+  </main>
+  <div id="site-footer"></div>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js" integrity="sha384-0w2KAL2YHP6wKOkUDzkCDGgVvfmHnj02DHeQ6XcHOgTfFsGyonKOpShMH1x6nk9o" crossorigin="anonymous"></script><script src="pages.js"></script><script src="reclamaciones.js"></script><script src="app.js?v=20261111"></script><script src="engage.js?v=20261111"></script><script src="seasonal.js?v=20261111"></script><script src="payments-mp.js?v=20261111"></script><script src="mishi-ai.js?v=20261111"></script>
+</body>
+</html>

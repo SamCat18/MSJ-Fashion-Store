@@ -1,0 +1,59 @@
+.stock-editor{display:flex;align-items:center;gap:6px}.stock-editor span{font-size:9px}.stock-editor input{width:58px;border:1px solid var(--line);padding:5px;font-size:10px}.table-wrap td:nth-child(4){white-space:normal;min-width:180px}
+.preview-button{width:100%;margin-top:12px}.preview-note{text-align:center;color:var(--muted);font-size:10px;margin:8px 0 0}.demo-banner{display:flex;align-items:center;gap:12px;margin:0 0 20px;padding:11px 14px;background:#f4ebd9;border-left:3px solid #a77a32;color:#504328;font-size:11px}.demo-banner strong{white-space:nowrap}.demo-banner span{color:#74694f}#stock-field[hidden]{display:none}
+.row-action.danger-action{color:#a13f33}
+.order-delivery small{display:block;color:var(--muted);font-size:10px;line-height:1.5;margin-top:3px}
+.complaint-details{display:grid;grid-template-columns:150px 1fr;gap:6px 14px;font-size:11px;margin:0 0 14px;padding:12px;background:#f7f4ee;border:1px solid var(--line)}
+.complaint-details dt{color:var(--muted)}.complaint-details dd{margin:0;white-space:pre-wrap;overflow-wrap:anywhere}
+.editor-actions{display:flex;gap:10px}.editor-actions>*{flex:1}.editor-actions .secondary-button{display:flex;align-items:center;justify-content:center;margin-top:0}
+.due-overdue{color:#a13f33;font-weight:600}.due-soon{color:#a77a32;font-weight:600}
+.complaint-snippet{max-width:260px;white-space:normal}
+.zone-input{width:84px;border:1px solid var(--line);padding:6px;font-size:11px}
+.inline-check{display:flex!important;align-items:center;gap:8px;flex-direction:row!important}
+.inline-check input{width:auto!important}
+@media(max-width:650px){.complaint-details{grid-template-columns:1fr}.complaint-details dt{margin-top:4px}}
+#orders-table td small{display:block;font-size:11px;color:#79766f;margin-top:2px}
+/* Verificación de Yape/Lemon: aprobar emite la boleta o factura; rechazar anula el pedido. */
+.wallet-review{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0}
+.wallet-review button{min-height:34px;padding:0 12px;border:1px solid;font-size:11.5px;font-weight:700;cursor:pointer}
+.wallet-approve{background:#2f6b3a;border-color:#2f6b3a;color:#fff}
+.wallet-approve:hover{background:#245530}
+.wallet-reject{background:#fff;border-color:#9b3b3b;color:#9b3b3b}
+.wallet-reject:hover{background:#f7e6e3}
+#orders-table td small.receipt-issued{color:#2f6b3a;font-weight:700}
+#orders-table td small.receipt-sent{color:#2f6b3a}
+#orders-table td small.receipt-unsent{color:#a77a32;font-weight:600}
+.wallet-send{background:#fff;border-color:#171715;color:#171715}
+.wallet-send:hover{background:#171715;color:#fff}
+#orders-table td small.wallet-rejected{color:#9b3b3b;font-weight:600;white-space:normal}
+/* Gestión: ganancias, proveedores, movimientos, avisos de pago y modo oscuro */
+.admin-theme,.admin-bell{border:1px solid #ffffff40;background:transparent;color:inherit;padding:6px 10px;margin-right:8px;font-size:11px;cursor:pointer}
+.admin-bell{background:#742284;border-color:#742284;color:#fff;animation:bellPulse 1.6s ease-in-out infinite}
+.admin-bell[hidden]{display:none}
+@keyframes bellPulse{50%{box-shadow:0 0 0 6px #74228433}}
+.side-link[data-badge]:not([data-badge=""])::after{content:attr(data-badge);margin-left:auto;background:#742284;color:#fff;border-radius:10px;padding:1px 7px;font-size:10px}
+.compact-tools{margin:0;gap:8px}
+.profit-grid .metric.highlight{background:#171715;color:#f3ead6;border-color:#171715}
+.profit-grid .metric.highlight small,.profit-grid .metric.highlight span{color:#d8cfbf}
+.metric.good strong{color:#2f6b3a}.metric.bad strong{color:#9b3b3b}
+.profit-chart{display:flex;align-items:flex-end;gap:6px;height:180px;padding:10px 4px 0}
+.profit-bar{flex:1;height:100%;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;gap:4px}
+.profit-bar i{display:block;width:100%;max-width:28px;background:linear-gradient(180deg,#c9ab6a,#8a6a2c);border-radius:4px 4px 0 0}
+.profit-bar small{font-size:9px;color:#79766f}
+.profit-formula{list-style:none;margin:0;padding:0;font-size:13px}
+.profit-formula li{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:7px 0;border-bottom:1px solid #ece6da}
+.profit-formula li.total{font-weight:700;border-bottom:2px solid #171715}
+.profit-formula li.aside{color:#79766f;font-size:12px}
+.profit-formula input{width:90px;margin-left:6px;padding:3px 6px}
+.gestion-form{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 10px}
+.gestion-form input,.gestion-form select{padding:8px;border:1px solid #d7d1c5;font-size:12px;min-width:0;flex:1 1 140px}
+.gestion-form select[name="variant_id"]{flex:2 1 260px}
+#view-suppliers td small,#view-movements td small{display:block;font-size:11px;color:#79766f}
+.move-tag{font-size:10px;padding:3px 7px;border-radius:10px;background:#eee}
+.move-tag.venta{background:#f1e8d4;color:#806527}.move-tag.compra{background:#e3eadf;color:#386344}.move-tag.ajuste{background:#e4e8f1;color:#3d4f7a}
+td.neg strong{color:#9b3b3b}td.pos strong{color:#2f6b3a}
+.pay-toast{position:fixed;right:20px;bottom:20px;z-index:9999;max-width:360px;background:#171715;color:#f3ead6;border-left:4px solid #742284;padding:14px 16px;box-shadow:0 12px 30px #0006;display:flex;flex-direction:column;gap:4px;cursor:pointer;transform:translateY(130%);transition:transform .35s ease}
+.pay-toast.show{transform:none}
+.pay-toast small{color:#b8b2a6;font-size:11px}
+.pay-toast+.pay-toast{bottom:120px}
+html.msj-dark{filter:invert(1) hue-rotate(180deg) brightness(.92)}
+html.msj-dark img,html.msj-dark video,html.msj-dark .pay-toast,html.msj-dark .admin-sidebar,html.msj-dark .admin-topbar,html.msj-dark .profit-grid .metric.highlight{filter:invert(1) hue-rotate(180deg)}

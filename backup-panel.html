@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f3f0e9">
+  <title>Respaldos locales | MSJ</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="backup-panel.css">
+</head>
+<body>
+  <header class="backup-header"><a class="brand" href="admin.html">MSJ<small>ADMINISTRACIÓN</small></a><span class="header-title">RESPALDOS LOCALES</span><span class="connection-state" id="connection-state"><i></i> Conectando</span></header>
+  <main class="backup-main">
+    <section class="page-heading"><div><p class="eyebrow">BASE DE DATOS · POSTGRESQL</p><h1>Respaldos</h1><p>Copias comprimidas guardadas en la carpeta local <code>backups/</code>.</p></div><button class="primary-button" id="run-backup">Crear backup ahora</button></section>
+    <p class="notice" id="backup-message" role="status" aria-live="polite">Consultando el estado del respaldo local.</p>
+    <section class="metric-grid" aria-label="Estado del respaldo"><article class="metric"><span>Respaldos locales</span><strong id="backup-count">—</strong><small>Retención de 30 días</small></article><article class="metric"><span>Última ejecución</span><strong id="last-run">—</strong><small id="last-result">Sin datos todavía</small></article><article class="metric"><span>Próxima ejecución</span><strong id="next-run">—</strong><small id="schedule-state">Tarea no instalada</small></article><article class="metric"><span>Herramientas</span><strong id="tool-state">—</strong><small>PostgreSQL pg_dump</small></article></section>
+    <section class="backup-list"><div class="section-heading"><div><p class="eyebrow">ARCHIVOS LOCALES</p><h2>Historial de respaldos</h2></div><button class="secondary-button" id="refresh-backups">Actualizar</button></div><div class="table-wrap"><table><thead><tr><th>Archivo</th><th>Fecha</th><th>Tamaño</th></tr></thead><tbody id="backup-files"><tr><td colspan="3" class="empty">Esperando al servicio local…</td></tr></tbody></table></div></section>
+    <p class="local-note">Este panel solo escucha en este equipo. La tarea se ejecuta cada 6 horas mientras la sesión de Windows esté iniciada, el equipo encendido y haya conexión.</p>
+  </main>
+  <script>window.BACKUP_TOKEN = "__BACKUP_TOKEN__";</script>
+  <script src="backup-panel.js"></script>
+</body>
+</html>
