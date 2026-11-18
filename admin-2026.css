@@ -88,3 +88,15 @@ html body .product-editor::backdrop{background:rgb(17 17 16 / .3);-webkit-backdr
 .c26-picker-list small{color:var(--muted)}
 .form-message.ok{color:var(--ok)}.form-message.error{color:var(--bad)}
 html.msj-dark .c26-bars rect{fill:#e9e6df}
+
+/* Editor de productos: marca y colecciones (2026-11-18) */
+.editor-collections{grid-column:1 / -1;border:1px solid var(--line,#e2ddd3);border-radius:14px;padding:10px 14px 12px;margin:0}
+.editor-collections legend{padding:0 6px;font-size:12px;font-weight:600}
+#editor-collections{display:flex;flex-wrap:wrap;gap:8px}
+.check-chip{display:inline-flex!important;flex-direction:row!important;align-items:center;gap:6px;padding:6px 12px;border:1px solid var(--line,#e2ddd3);border-radius:999px;font-size:13px;cursor:pointer}
+.check-chip input{width:auto!important;margin:0}
+/* Cuenta sin rol de administración: pasos para activarla */
+.denied-steps{text-align:left;margin:14px auto;max-width:520px;line-height:1.6;padding-left:22px}
+.denied-steps code{background:rgb(0 0 0 / .06);padding:1px 6px;border-radius:6px}
+.denied-note{font-size:13px;opacity:.8;max-width:520px;margin:0 auto 14px}
+#access-denied .primary-button{margin-right:8px}
