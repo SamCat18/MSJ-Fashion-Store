@@ -18,12 +18,13 @@
   function renderSeason() {
     const node = document.getElementById('season-budgets');
     if (!node || !app().productCard) return;
-    const bands = [['Detalles hasta S/ 50', 0, 50], ['De S/ 50 a S/ 100', 50, 100], ['De S/ 100 a S/ 200', 100, 200], ['Regalos premium', 200, Infinity]];
+    // Cada presupuesto con su frase y su «Ver todo» al filtro de precio de la tienda (antes buscaba «regalo» y podía salir vacío).
+    const bands = [['Detalles hasta S/ 50', 0, 50, '🎁 AMIGO SECRETO'], ['De S/ 50 a S/ 100', 50, 100, '✨ DETALLES QUE SORPRENDEN'], ['De S/ 100 a S/ 200', 100, 200, '❤ REGALOS QUE ENAMORAN'], ['Regalos premium', 200, Infinity, '★ PARA ALGUIEN MUY ESPECIAL']];
     const products = buyable();
-    node.innerHTML = bands.map(([title, min, max]) => {
+    node.innerHTML = bands.map(([title, min, max, eyebrow]) => {
       const list = products.filter(product => price(product) > min && price(product) <= max)
         .sort((a, b) => Number(Boolean(b.is_new)) - Number(Boolean(a.is_new)) || Number(b.discount_percent || 0) - Number(a.discount_percent || 0)).slice(0, 8);
-      return list.length ? app().railMarkup(title, list, `tienda.html?q=regalo`, 'AMIGO SECRETO E INTERCAMBIOS') : '';
+      return list.length ? app().railMarkup(title, list, Number.isFinite(max) ? `tienda.html?max=${max}` : 'tienda.html', eyebrow) : '';
     }).join('');
     app().initCarousels?.();
     const calendar = document.getElementById('season-calendar');
