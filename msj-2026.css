@@ -838,3 +838,7 @@ html body .grid-more .hero-link{min-width:240px;justify-content:center}
 html body .collection .section-heading h2{text-transform:none}
 /* Carruseles en celular: tarjetas separadas (antes se montaban por un ancho mínimo de 190px) */
 @media (max-width:760px){html body .rail-track{gap:12px}html body .rail-track .product-card{min-width:0}}
+/* Círculos de categorías: un círculo limpio (antes una regla general les ponía esquinas de cuadro) */
+html body .category-circle .circle-image{border-radius:50%!important;background:var(--surface,#fff);box-shadow:0 0 0 1px var(--line),0 6px 16px -10px rgb(17 17 16 / .35)}
+html body .category-circle .circle-image img{border-radius:50%!important}
+html body .category-circle:hover .circle-image{box-shadow:0 0 0 2px var(--accent,#b08d57),0 10px 22px -10px rgb(17 17 16 / .4)}
