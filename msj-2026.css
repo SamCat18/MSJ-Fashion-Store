@@ -751,3 +751,36 @@ html body .auth-forgot{justify-self:end;margin:-4px 0 6px;font-size:12.5px}
 .about-values li{padding:9px 16px;border-radius:var(--r-pill);background:rgb(255 255 255 / .55);border:1px solid rgb(255 255 255 / .7);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);font-size:13.5px;color:var(--ink-2)}
 .about-values b{color:var(--ink);font-weight:600}
 @media (max-width:760px){.about-grid{grid-template-columns:1fr}.about-values li{font-size:13px;padding:8px 14px}}
+
+/* ===== Ficha de producto (2026-11-18): foto enmarcada y más aire ===== */
+html body .dialog.product-dialog{width:min(1020px,calc(100% - 32px))}
+html body .product-detail{grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);align-items:start;min-height:0}
+html body .product-detail .detail-gallery,html body .product-detail .detail-gallery.single{position:sticky;top:0;display:grid;grid-template-columns:1fr;grid-template-rows:none;gap:12px;min-height:0;height:auto;padding:18px;background:transparent}
+html body .product-detail .detail-gallery img{width:100%;height:auto;min-height:0;aspect-ratio:4/5;max-height:calc(88dvh - 36px);object-fit:cover;object-position:center 30%;border-radius:var(--r-lg)!important;background:var(--surface-2,#efebe3);box-shadow:0 18px 40px -26px rgb(17 17 16 / .45)}
+html body .product-detail .detail-gallery img+img{aspect-ratio:4/3;max-height:none}
+html body .product-detail .detail-copy{padding:64px 40px 34px 22px}
+html body .product-detail .detail-copy .eyebrow{margin:0 0 12px;line-height:1.5}
+html body .product-detail .detail-copy h2{font-size:clamp(24px,2.6vw,32px);line-height:1.12;margin:0 0 14px;text-wrap:balance}
+html body .product-detail .detail-price{margin:0 0 4px;font-size:16px}
+html body .product-detail .detail-description{font-size:14px;line-height:1.7;margin:20px 0 24px}
+html body .product-detail .field-label{display:block;margin:0 0 10px;font-weight:600}
+html body .product-detail .detail-specs{margin:0 0 26px;padding:14px 0;gap:10px 18px;font-size:13px}
+html body .product-detail .color-list,html body .product-detail .size-list{margin:0 0 24px;gap:10px}
+html body .product-detail .field-row{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:0 0 10px}
+html body .product-detail .field-row .field-label{margin:0}
+html body .product-detail .quantity-picker{margin:0 0 22px}
+html body .product-detail #add-to-cart,html body .product-detail .detail-copy>.primary-button{width:100%;min-height:50px}
+html body .product-detail .detail-actions{margin-top:14px}
+html body .product-detail .detail-perks{margin-top:22px;padding-top:18px;gap:9px;font-size:13px}
+@media (max-width:780px){
+  html body .product-detail{grid-template-columns:1fr}
+  html body .product-detail .detail-gallery,html body .product-detail .detail-gallery.single{position:static;grid-template-columns:1fr;padding:12px 12px 0}
+  html body .product-detail .detail-gallery img{aspect-ratio:1/1;max-height:58dvh}
+  html body .product-detail .detail-gallery img+img{display:none}
+  html body .product-detail .detail-copy{padding:22px 20px 28px}
+}
+html body .product-detail :is(.stock-note,.form-error):empty{display:none}
+html body .product-detail .stock-note:not(:empty){margin:-12px 0 18px}
+html body .product-detail .quantity-picker{border-radius:var(--r-pill)!important;overflow:hidden;display:inline-flex;align-items:center}
+html body .product-detail .quantity-picker button{border-radius:var(--r-pill)!important}
+html body .product-detail .vip-upsell{display:block;width:100%;margin:12px 0 0;padding:11px 16px;border-radius:var(--r-md)!important;text-align:left;line-height:1.45}
