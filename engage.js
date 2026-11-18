@@ -32,7 +32,9 @@ window.MSJEngage = (() => {
   const data = window.MSJ_DATA;
   if (!UI) return {};
   const state = {tab: 'studio', draft: UI.read(), engagement: null, notifications: [], loyalty: null, loading: false, missing: false};
-  const accents = [['#b08d57', 'Champán'], ['#121211', 'Grafito'], ['#7f1d1d', 'Burdeos'], ['#166534', 'Pino'], ['#1d4ed8', 'Océano'], ['#7c3aed', 'Lavanda'], ['#e2553f', 'Coral'], ['#c1121f', 'Navidad']];
+  // Paleta pensada para el Liquid Glass: tonos medios y suaves que se ven bien detrás del vidrio claro.
+  // Champán es el color principal de MSJ (predeterminado); con él la tienda se ve como siempre.
+  const accents = [['#b08d57', 'Champán (principal)'], ['#2b2a27', 'Grafito'], ['#8c3b47', 'Burdeos'], ['#5f7f6e', 'Salvia'], ['#3f6f9f', 'Glaciar'], ['#7a68ad', 'Lavanda'], ['#b9664a', 'Terracota'], ['#b7707f', 'Rosa cuarzo']];
   const groups = [
     ['surface', 'Fondo', [['nieve', 'Nieve'], ['marfil', 'Marfil'], ['niebla', 'Niebla'], ['champan', 'Champán'], ['pino', 'Pino'], ['obsidiana', 'Obsidiana']]],
     ['radius', 'Esquinas', [['recto', 'Sutil'], ['suave', 'Suave'], ['redondo', 'Redondas']]],
@@ -66,10 +68,10 @@ window.MSJEngage = (() => {
     {min: 6, name: 'Ícono MSJ', reward: 'Color libre: elige cualquier tono para tu tienda'},
     {min: 9, name: 'Leyenda', reward: 'Look «Leyenda Oro» e insignia dorada en tu cabecera'}
   ];
-  const extraAccents = [['#4d7c0f', 'Oliva'], ['#c2a878', 'Arena'], ['#0ea5e9', 'Cielo'], ['#db2777', 'Fucsia']];
+  const extraAccents = [['#6f7d45', 'Oliva'], ['#c2a878', 'Arena'], ['#3d8fbf', 'Cielo'], ['#a2507f', 'Orquídea']];
   const authorLooks = [
     ['Arena Minimal', {accent: '#c2a878', surface: 'marfil', radius: 'redondo', font: 'moderna', cards: 'enmarcada', glass: 'sutil'}, 2],
-    ['Cielo Editorial', {accent: '#0ea5e9', surface: 'niebla', radius: 'suave', font: 'editorial', cards: 'limpia', glass: 'normal'}, 2],
+    ['Cielo Editorial', {accent: '#3d8fbf', surface: 'niebla', radius: 'suave', font: 'editorial', cards: 'limpia', glass: 'normal'}, 2],
     ['Leyenda Oro', {accent: '#b08d57', surface: 'marfil', radius: 'redondo', font: 'editorial', cards: 'enmarcada', glass: 'normal'}, 4]
   ];
   const readLocal = (key, fallback) => { try { const value = JSON.parse(localStorage.getItem(key) || 'null'); return value ?? fallback; } catch { return fallback; } };
@@ -98,11 +100,11 @@ window.MSJEngage = (() => {
     app().showToast?.(levelIndex > previousLevel ? `🏅 ¡Subiste a nivel ${level.name}! Desbloqueaste: ${level.reward}.` : `${icon} Logro desbloqueado: ${title}`);
   }
   const looks = [
-    ['Minimal Nieve', {accent: '#121211', surface: 'nieve', radius: 'suave', font: 'moderna', cards: 'limpia', glass: 'normal'}],
+    ['Minimal Nieve', {accent: '#2b2a27', surface: 'nieve', radius: 'suave', font: 'moderna', cards: 'limpia', glass: 'normal'}],
     ['Editorial Marfil', {accent: '#b08d57', surface: 'marfil', radius: 'suave', font: 'editorial', cards: 'enmarcada', glass: 'sutil'}],
-    ['Niebla Océano', {accent: '#1d4ed8', surface: 'niebla', radius: 'redondo', font: 'moderna', cards: 'limpia', glass: 'normal'}],
-    ['Navidad Pino ✦', {accent: '#c1121f', surface: 'pino', radius: 'redondo', font: 'editorial', cards: 'flotante', glass: 'intenso', festive: true}],
-    ['Gala Champán ✦', {accent: '#7f1d1d', surface: 'champan', radius: 'suave', font: 'geometrica', cards: 'flotante', glass: 'intenso'}],
+    ['Niebla Glaciar', {accent: '#3f6f9f', surface: 'niebla', radius: 'redondo', font: 'moderna', cards: 'limpia', glass: 'normal'}],
+    ['Navidad Pino ✦', {accent: '#8c3b47', surface: 'pino', radius: 'redondo', font: 'editorial', cards: 'flotante', glass: 'intenso', festive: true}],
+    ['Gala Champán ✦', {accent: '#8c3b47', surface: 'champan', radius: 'suave', font: 'geometrica', cards: 'flotante', glass: 'intenso'}],
     ['Noche Obsidiana ✦', {accent: '#b08d57', surface: 'obsidiana', radius: 'redondo', font: 'moderna', cards: 'flotante', glass: 'intenso'}]
   ];
   const isVip = () => Boolean(app().vipLevel?.());
@@ -127,6 +129,7 @@ window.MSJEngage = (() => {
     sheet.hidden = false; backdrop.hidden = false;
     requestAnimationFrame(() => { sheet.classList.add('open'); backdrop.classList.add('open'); });
     document.body.classList.add('studio-open');
+    delete sheet.dataset.tab; // al abrir, el panel empieza arriba
     render();
     if (tab !== 'studio') refresh();
     sheet.querySelector(`[data-studio-tab="${tab}"]`)?.focus();
@@ -144,10 +147,19 @@ window.MSJEngage = (() => {
   function render() {
     const user = app().user;
     const unread = state.engagement?.unread || 0;
+    // Al elegir un color u opción se redibuja el panel: se conserva el scroll y el foco para no saltar arriba.
+    const previousBody = sheet.querySelector('.studio-body');
+    const keepScroll = previousBody && sheet.dataset.tab === state.tab ? previousBody.scrollTop : 0;
+    const focused = sheet.contains(document.activeElement) ? document.activeElement : null;
+    const focusKey = focused && ['stKey', 'stLook', 'ppKey', 'studioTab'].find(key => focused.dataset[key] !== undefined);
+    const focusSelector = focusKey ? `[data-${focusKey.replace(/[A-Z]/g, char => `-${char.toLowerCase()}`)}="${CSS.escape(focused.dataset[focusKey])}"]${focused.dataset.stValue ? `[data-st-value="${CSS.escape(focused.dataset.stValue)}"]` : ''}${focused.dataset.ppValue ? `[data-pp-value="${CSS.escape(focused.dataset.ppValue)}"]` : ''}` : '';
     sheet.innerHTML = `
       <header class="studio-head"><div><p class="eyebrow">MSJ STUDIO ${isVip() ? '· ✦ PRIVILÈGE' : `· NIVEL ${escape(achievements().level.name.toUpperCase())}`}</p><h2 id="studio-title">${{rewards: 'Recompensas', alerts: 'Tus avisos', logros: 'Logros y niveles'}[state.tab] || 'Diseña tu tienda'}</h2></div><button class="dialog-close" type="button" data-studio-close aria-label="Cerrar">×</button></header>
       <nav class="studio-tabs" role="tablist">${[['studio', '✦ Diseña'], ['perfil', '💎 Perfil'], ['logros', '🏅 Logros'], ['rewards', '🔥 Recompensas'], ['alerts', `🔔 Avisos${unread ? ` <b>${unread}</b>` : ''}`]].map(([key, label]) => `<button type="button" role="tab" data-studio-tab="${key}" aria-selected="${state.tab === key}" class="${state.tab === key ? 'active' : ''}">${label}</button>`).join('')}</nav>
       <div class="studio-body">${state.tab === 'studio' ? studioMarkup() : state.tab === 'perfil' ? profileMarkup() : state.tab === 'logros' ? achievementsMarkup() : !user ? guestMarkup() : state.tab === 'rewards' ? rewardsMarkup() : alertsMarkup()}</div>`;
+    sheet.dataset.tab = state.tab;
+    if (keepScroll) sheet.querySelector('.studio-body').scrollTop = keepScroll;
+    if (focusSelector) sheet.querySelector(focusSelector)?.focus({preventScroll: true});
     if (state.tab === 'studio') paintPreview();
   }
   function guestMarkup() {

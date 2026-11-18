@@ -141,3 +141,7 @@ a.primary-button,a.secondary-button{display:flex;align-items:center;justify-cont
 @media(max-width:390px){.benefit-strip small{font-size:9px}.trust-band{grid-template-columns:1fr}}
 @media(prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.01ms!important;transition-duration:.01ms!important;scroll-behavior:auto!important}}
 @media print{.topbar,.announcement,.support-launcher,.support-panel,.site-footer,.skip-link{display:none!important}}
+.detail-specs{display:grid;grid-template-columns:minmax(90px,auto) 1fr;gap:7px 16px;margin:8px 0 20px;padding:12px 0;border-top:1px solid var(--line,#e5e1d8);border-bottom:1px solid var(--line,#e5e1d8);font-size:12.5px;line-height:1.5}
+.detail-specs div{display:contents}
+.detail-specs dt{color:var(--muted,#686a62)}
+.detail-specs dd{margin:0;overflow-wrap:anywhere}

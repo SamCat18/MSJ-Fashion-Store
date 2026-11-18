@@ -16,10 +16,14 @@ window.MSJUI = (() => {
   };
   // Debe coincidir con save_ui_theme (database/v2026.sql): estas opciones solo se guardan con membresía Privilège.
   const premium = {surface: ['champan', 'pino', 'obsidiana'], font: ['geometrica'], cards: ['flotante'], glass: ['intenso']};
+  // Paleta 2026 (tonos que combinan con el Liquid Glass). Los colores de la paleta anterior se pasan a su equivalente nuevo
+  // para que quien ya los había guardado siga viendo su color marcado en el Studio.
+  const legacyAccents = {'#121211': '#2b2a27', '#7f1d1d': '#8c3b47', '#166534': '#5f7f6e', '#1d4ed8': '#3f6f9f', '#7c3aed': '#7a68ad',
+    '#e2553f': '#b9664a', '#c1121f': '#8c3b47', '#4d7c0f': '#6f7d45', '#0ea5e9': '#3d8fbf', '#db2777': '#a2507f'};
   function clean(theme) {
     const result = {...defaults};
     if (theme && typeof theme === 'object') {
-      if (/^#[0-9a-f]{6}$/i.test(theme.accent || '')) result.accent = theme.accent.toLowerCase();
+      if (/^#[0-9a-f]{6}$/i.test(theme.accent || '')) { const hex = theme.accent.toLowerCase(); result.accent = legacyAccents[hex] || hex; }
       Object.keys(allowed).forEach(key => { if (allowed[key].includes(theme[key])) result[key] = theme[key]; });
       if (typeof theme.festive === 'boolean') result.festive = theme.festive;
     }
@@ -30,18 +34,23 @@ window.MSJUI = (() => {
   function saveLocal(theme) { try { localStorage.setItem(studioKey, JSON.stringify(clean(theme))); } catch {} }
   function contrastInk(hex) {
     const [r, g, b] = [1, 3, 5].map(index => parseInt(hex.slice(index, index + 2), 16) / 255).map(value => value <= .03928 ? value / 12.92 : ((value + .055) / 1.055) ** 2.4);
-    return .2126 * r + .7152 * g + .0722 * b > .45 ? '#121211' : '#ffffff';
+    // Texto oscuro sobre colores claros (Arena, Cielo claro…), blanco sobre el resto.
+    return .2126 * r + .7152 * g + .0722 * b > .3 ? '#121211' : '#ffffff';
   }
   // Aplica el diseño al <html> (o a un contenedor, para la vista previa del Studio).
   function apply(theme, target = root, {vip = true} = {}) {
     const value = clean(theme);
     // Un cliente sin membresía no conserva opciones premium fuera de la vista previa.
     if (!vip && target === root) Object.entries(premium).forEach(([key, values]) => { if (values.includes(value[key])) value[key] = defaults[key]; });
-    [...target.classList].filter(name => name.startsWith('studio-')).forEach(name => target.classList.remove(name));
+    // Solo se quitan las clases de diseño (no «studio-preview» ni otras del contenedor).
+    [...target.classList].filter(name => /^studio-(surface|radius|density|font|cards|motion|glass|header)-/.test(name)).forEach(name => target.classList.remove(name));
     ['surface', 'radius', 'density', 'font', 'cards', 'motion', 'glass', 'header'].forEach(key => { if (value[key] !== defaults[key]) target.classList.add(`studio-${key}-${value[key]}`); });
     target.style.setProperty('--accent', value.accent);
     target.style.setProperty('--accent-ink', contrastInk(value.accent));
     target.classList.toggle('studio-festive-off', !value.festive);
+    // Champán es el color principal: la tienda se ve como siempre. Con otro color, msj-2026.css lo lleva a botones,
+    // selecciones y detalles de todas las páginas (html.studio-accent-custom).
+    target.classList.toggle('studio-accent-custom', value.accent !== defaults.accent);
     if (target === root) {
       // Obsidiana usa el modo oscuro de la tienda (el mismo del selector de tema).
       const wantsDark = value.surface === 'obsidiana';
@@ -156,6 +165,21 @@ window.MSJUI = (() => {
     });
   }
   markReveal();
+
+  // Enlaces con ancla (p. ej. index.html#nosotros): el catálogo de Supabase llega después y empuja la sección hacia abajo,
+  // así que se vuelve a ubicar cuando termina de cargar (solo si el cliente aún no se movió por su cuenta).
+  if (location.hash.length > 1) {
+    let landedY = null;
+    const relocate = () => {
+      let node = null; try { node = document.getElementById(decodeURIComponent(location.hash.slice(1))); } catch {}
+      if (!node || (landedY !== null && Math.abs(scrollY - landedY) > 40)) return;
+      node.classList.add('in');
+      node.scrollIntoView({block: 'start'});
+      landedY = scrollY;
+    };
+    addEventListener('load', () => { relocate(); }, {once: true});
+    document.addEventListener('msj:catalog', () => setTimeout(relocate, 80), {once: true});
+  }
 
   return {read, clean, apply, saveLocal, isPremium, defaults, allowed, premium, glassify};
 })();

@@ -63,6 +63,9 @@ window.MSJSeason = (() => {
   }
 
   // ---------- Portada navideña + guía de regalos ----------
+  // La ventana 2027 solo está «activa» si se encendió y aún no llega la fecha de lanzamiento.
+  const teaserActive = cfg => Boolean(cfg?.enabled) && !(cfg.launch_at && Date.now() > Date.parse(cfg.launch_at));
+  let teaserOn = false;
   function seasonHero(cfg) {
     const anchor = document.getElementById('season-hero-slot') || document.getElementById('home-promo-calendar');
     if (!anchor || document.getElementById('season-hero')) return;
@@ -71,7 +74,7 @@ window.MSJSeason = (() => {
       <img src="${image('1513297887119-d46091b24bfa', 1600)}" alt="" loading="lazy">
       <div class="season-copy"><p class="eyebrow">TEMPORADA ${new Date().getFullYear()}</p><h2 id="season-title">${escape(cfg.headline || 'Navidad MSJ')}</h2><p>${escape(cfg.subline || '')}</p>
         <div class="season-count lg lg-dark" data-season-count="${christmas}" aria-label="Cuenta regresiva para Navidad"></div>
-        <div class="season-ctas"><a class="hero-link" href="#gift-guide">Guía de regalos</a><button type="button" class="season-teaser-chip lg" data-open-teaser>2027 · Coming soon →</button></div>
+        <div class="season-ctas"><a class="hero-link" href="#gift-guide">Guía de regalos</a>${teaserOn ? '<button type="button" class="season-teaser-chip lg" data-open-teaser>2027 · Coming soon →</button>' : ''}</div>
         ${cfg.gift_wrap ? '<span class="season-wrap">🎁 Envolvemos gratis cada pedido de diciembre</span>' : ''}</div>
     </section>`);
     tickCounts();
@@ -207,6 +210,9 @@ window.MSJSeason = (() => {
   async function init() {
     const settings = await (window.MSJSettings?.load() || Promise.resolve({}));
     const season = settings.season || {};
+    teaserOn = teaserActive(settings.teaser_2027) || params.get('teaser') === '1';
+    // Botones fijos «2027 · Coming soon» (p. ej. en navidad.html): solo se ven si la ventana está activa.
+    document.querySelectorAll('[data-open-teaser]').forEach(button => { button.hidden = !teaserOn; });
     const forcedSeason = /navidad|christmas/i.test(params.get('season') || '') || page === 'season';
     const christmas = forcedSeason || (season.enabled !== false && season.mode === 'christmas' && inWindow(season));
     document.documentElement.classList.toggle('season-christmas', christmas && festiveAllowed());

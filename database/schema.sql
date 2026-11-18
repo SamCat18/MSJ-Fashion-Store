@@ -72,6 +72,8 @@ create table if not exists public.products (
 alter table public.products add column if not exists is_new boolean not null default false;
 alter table public.products add column if not exists discount_percent numeric(5,2) not null default 0 check (discount_percent between 0 and 90);
 alter table public.products add column if not exists model_image_url text not null default '';
+-- Ficha completa (elemento 5 «Características»): {"Material":"Lino","Contenido":"100 ml",...}
+alter table public.products add column if not exists specs jsonb not null default '{}'::jsonb check (jsonb_typeof(specs) = 'object');
 create table if not exists public.product_variants (
   id uuid primary key default gen_random_uuid(), product_id uuid not null references public.products(id) on delete cascade,
   size text not null, color text not null default 'Unico', price numeric(10,2) check (price >= 0),

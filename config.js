@@ -52,7 +52,9 @@ window.STORE_CONFIG = {
   // Respaldo sin base de datos (el panel → Centro 2026 → Personalización manda cuando database/v2026.sql está instalado).
   season: { mode: 'christmas', enabled: true, starts_at: '2026-11-01T00:00:00-05:00', ends_at: '2027-01-07T00:00:00-05:00', snow: true, lights: true,
     headline: 'Navidad MSJ', subline: 'Regalos que se sienten como un abrazo. Envolvemos gratis cada pedido.', gift_wrap: true },
-  teaser2027: { enabled: true, title: '2027 · Coming soon', subtitle: 'Neo Minimal: la nueva colección MSJ llega con el año nuevo.',
+  // Ventana «2027 · Coming soon»: apagada por ahora (no sale sola ni se ven sus botones). Para activarla: enabled: true
+  // o el panel → Centro 2026 → Personalización. Vista previa sin activarla: añade ?teaser=1 a la dirección.
+  teaser2027: { enabled: false, title: '2027 · Coming soon', subtitle: 'Neo Minimal: la nueva colección MSJ llega con el año nuevo.',
     launch_at: '2027-01-01T00:00:00-05:00', cta: 'Avísame primero', frequency: 'daily' },
   loyalty: { enabled: true, points_per_sol: 1, welcome_points: 50, review_points: 20, checkin_points: 5, streak_bonus: 25, streak_every: 7,
     multipliers: { gold: 1.5, black: 2 }, rewards: [{ points: 500, amount: 10, min: 80 }, { points: 1000, amount: 25, min: 150 }, { points: 2000, amount: 60, min: 300 }] }

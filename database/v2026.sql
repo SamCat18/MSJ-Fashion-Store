@@ -45,7 +45,7 @@ create trigger audit_store_settings after insert or update or delete on public.s
 insert into public.store_settings (key,value,is_public,description) values
   ('season','{"mode":"christmas","enabled":true,"starts_at":"2026-11-01T00:00:00-05:00","ends_at":"2027-01-07T00:00:00-05:00","snow":true,"lights":true,"headline":"Navidad MSJ","subline":"Regalos que se sienten como un abrazo. Envolvemos gratis cada pedido.","gift_wrap":true}'::jsonb,
     true,'Temporada visual de la tienda (Navidad): nieve, luces, guía de regalos y franja festiva.'),
-  ('teaser_2027','{"enabled":true,"title":"2027 · Coming soon","subtitle":"Neo Minimal: la nueva colección MSJ llega con el año nuevo.","launch_at":"2027-01-01T00:00:00-05:00","cta":"Avísame primero","frequency":"daily"}'::jsonb,
+  ('teaser_2027','{"enabled":false,"title":"2027 · Coming soon","subtitle":"Neo Minimal: la nueva colección MSJ llega con el año nuevo.","launch_at":"2027-01-01T00:00:00-05:00","cta":"Avísame primero","frequency":"daily"}'::jsonb,
     true,'Ventana emergente «2027 Coming Soon» con cuenta regresiva.'),
   ('announcement','{"enabled":false,"text":""}'::jsonb,true,'Mensaje propio para la franja superior (reemplaza al automático).'),
   ('loyalty','{"enabled":true,"points_per_sol":1,"welcome_points":50,"review_points":20,"checkin_points":5,"streak_bonus":25,"streak_every":7,"multipliers":{"gold":1.5,"black":2},"rewards":[{"points":500,"amount":10,"min":80},{"points":1000,"amount":25,"min":150},{"points":2000,"amount":60,"min":300}]}'::jsonb,

@@ -221,9 +221,51 @@ html.studio-surface-niebla{--paper:#eef1f5;--surface:#fbfcfe;--surface-2:#e2e7ee
 html.studio-radius-recto{--r-xs:6px;--r-sm:8px;--r-md:10px;--r-lg:14px;--r-xl:18px}
 html.studio-radius-redondo{--r-xs:14px;--r-sm:18px;--r-md:24px;--r-lg:30px;--r-xl:40px}
 
+/* ---------- Color de acento de MSJ Studio en TODAS las páginas ----------
+   Champán (#b08d57) es el color principal: con él la tienda se ve como siempre (botones negros y detalles dorados).
+   Con otro color, ui-2026.js añade html.studio-accent-custom y los botones, selecciones y detalles dorados toman el color
+   del cliente. Lo de marca se queda dorado a propósito: Privilège (VIP), M.I.S.H.I. y las luces de Navidad. */
+html.studio-accent-custom{--gold:var(--accent);--gold-deep:color-mix(in srgb,var(--accent) 78%,#000);--accent-soft:color-mix(in srgb,var(--accent) 12%,var(--surface));--accent-light:color-mix(in srgb,var(--accent) 45%,#fff);--accent-text:color-mix(in srgb,var(--accent) 82%,var(--ink))}
+/* Botones principales (con brillo de vidrio) */
+html.studio-accent-custom body :is(.primary-button,.hero-link,#place-order):not(:is(.home-vip,.vip-zone,.vip-page-club,.lounge,.x-hero-vip,.season-ctas,.teaser-card,.vip-reveal,.mishi-panel) *){background:var(--accent)!important;color:var(--accent-ink)!important;border-color:var(--accent)!important;box-shadow:inset 0 1px 0 rgb(255 255 255 / .3),inset 0 -1px 0 rgb(0 0 0 / .12),0 8px 20px -10px color-mix(in srgb,var(--accent) 85%,#000)!important}
+html.studio-accent-custom body :is(.primary-button,.hero-link):not(:is(.home-vip,.vip-zone,.vip-page-club,.lounge,.x-hero-vip,.season-ctas,.teaser-card,.vip-reveal,.mishi-panel) *):hover{background:color-mix(in srgb,var(--accent) 88%,#000)!important}
+/* Selecciones activas: tallas, pestañas, chips y filtros */
+html.studio-accent-custom body :is(.size-button.selected,.gift-tabs button.active,.cc-chip.on,.filter-chip.selected,.studio-tabs button.active,.st-opt.on){background:var(--accent)!important;color:var(--accent-ink)!important;border-color:var(--accent)!important}
+html.studio-accent-custom body .filter-chip:hover:not(.selected){border-color:var(--accent)!important;color:var(--accent-text)!important}
+html.studio-accent-custom body .account-tabs button.active{border-bottom-color:var(--accent)}
+html.studio-accent-custom body .mega-item:is(:hover,.open,.active) .mega-link{border-bottom-color:var(--accent)}
+html.studio-accent-custom body .nav-link.active::after{background:var(--accent)}
+html.studio-accent-custom body .active-chip{border-color:var(--accent);color:var(--accent-text)}
+html.studio-accent-custom body .bag-count{background:var(--accent)!important;color:var(--accent-ink)!important}
+html.studio-accent-custom body .st-swatch.on{box-shadow:0 0 0 2px var(--surface),0 0 0 4px var(--accent)}
+/* Detalles sobre fondo claro */
+html.studio-accent-custom body :is(.benefit-icon,.promo-event .promo-big,.hero .eyebrow,.section-heading .eyebrow,.x-hero:not(.x-hero-vip) h1 em){color:var(--accent)!important}
+/* Casillas, botones de opción y el deslizador de precio también toman el color (en vez del azul del navegador) */
+html.studio-accent-custom body{accent-color:var(--accent)}
+html.studio-accent-custom body .text-button:not(:is(.lounge,.home-vip,.vip-zone,.vip-page-club,.x-hero-vip) *){color:var(--accent-text)}
+html.studio-accent-custom body .heading-rule{background:var(--accent)}
+html.studio-accent-custom body .promo-event .promo-status{background:var(--accent-soft);color:var(--accent-text)}
+html.studio-accent-custom body :is(.promo-hint,.consult-note,.draft-banner,.order-wallet.pending,.order-wallet.rejected){border-left-color:var(--accent);background:var(--accent-soft)}
+html.studio-accent-custom body .order-code-box{border-color:var(--accent);background:var(--accent-soft)}
+html.studio-accent-custom body .order-code-box small{color:var(--accent-text)}
+html.studio-accent-custom body .tracking-steps li.current::before{background:var(--accent);border-color:var(--accent);box-shadow:0 0 0 5px color-mix(in srgb,var(--accent) 20%,transparent)}
+html.studio-accent-custom body .map-land{stroke:var(--accent)}
+/* Detalles sobre fotos y fondos oscuros (tono claro del color para que se lea) */
+html.studio-accent-custom body :is(.promo-card .eyebrow,.catalog-hero .eyebrow,.offer-stamp,.collection-cover em,.closing-band em,.site-footer h2,.footer-credits,.site-footer .wordmark small,.cause-carousel .eyebrow,.review-band .eyebrow,.announcement.promo-live span){color:var(--accent-light)!important}
+html.studio-accent-custom body :is(.social-links a,.footer-legal a){color:color-mix(in srgb,var(--accent) 35%,#fff)!important}
+html.studio-accent-custom body .social-links a:hover{border-color:var(--accent-light);background:color-mix(in srgb,var(--accent) 12%,transparent)}
+/* Tarjetas de promoción de la portada */
+html.studio-accent-custom body .promo-card a{background:var(--accent);color:var(--accent-ink)}
+html.studio-accent-custom body .promo-offers a{background:#171715;color:#fff}
+html.studio-accent-custom body .promo-offers{background-color:var(--accent)}
+html.studio-accent-custom body .promo-offers::before{background:linear-gradient(90deg,color-mix(in srgb,var(--accent) 95%,transparent) 0%,color-mix(in srgb,var(--accent) 80%,transparent) 48%,color-mix(in srgb,var(--accent) 18%,transparent) 100%)}
+
 /* ---------- Modo oscuro (inversión de shop.css): el vidrio claro pasa a vidrio oscuro automáticamente ---------- */
 html.msj-dark{color-scheme:dark}
 html.msj-dark .search-suggest img{filter:invert(1) hue-rotate(180deg)}
+/* La portada navideña es una foto con texto blanco: en modo oscuro se mantiene tal cual (no se ve «lavada»). */
+html.msj-dark .season-hero{filter:invert(1) hue-rotate(180deg)}
+html.msj-dark .season-hero img{filter:none!important}
 
 /* =====================================================================================================================
    Catálogo: grilla adaptable (corrige la columna angosta en tablets y celulares: los filtros ocultos ya no ocupan 260 px)
@@ -267,6 +309,8 @@ html body:is(.studio-open,.panel-open) :is(.mishi-launcher,.rw-nudge,.back-to-to
 .studio-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;padding:20px 20px 8px}
 .studio-head h2{margin:2px 0 0;font-size:24px}
 .studio-tabs{display:flex;gap:6px;padding:4px 16px 12px;overflow-x:auto;scrollbar-width:none}
+/* En pantallas bajas (celular) la cabecera y las pestañas no se encogen ni se cortan: solo se desplaza el contenido. */
+.studio-head,.studio-tabs{flex:none}
 .studio-tabs button{border:0;background:rgb(17 17 16 / .05);color:var(--ink);padding:9px 14px;border-radius:var(--r-pill);font:600 13px var(--font-sans);white-space:nowrap;cursor:pointer;transition:background .2s,transform .3s var(--spring)}
 .studio-tabs button.active{background:var(--ink);color:#fff}
 .studio-tabs b{display:inline-grid;place-items:center;min-width:18px;height:18px;margin-left:4px;border-radius:999px;background:var(--sale);color:#fff;font-size:10px}
@@ -314,6 +358,9 @@ html body:is(.studio-open,.panel-open) :is(.mishi-launcher,.rw-nudge,.back-to-to
 .sp-chips{display:flex;gap:6px;margin:10px 0}
 .sp-chips span{font-size:10.5px;padding:4px 10px;border-radius:var(--r-pill);border:1px solid var(--line)}
 .sp-chips .on{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+/* Con el color principal (Champán) la tienda usa botones negros: la vista previa muestra lo mismo. */
+.studio-preview .sp-btn,.studio-preview .sp-chips .on{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.studio-preview.studio-accent-custom .sp-btn,.studio-preview.studio-accent-custom .sp-chips .on{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
 .sp-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
 .studio-density-compacto .sp-grid{gap:4px}
 .sp-card{display:grid;gap:3px;padding:4px;border-radius:var(--r-md);font-size:11px}
@@ -453,6 +500,7 @@ html body .gift-grid{grid-template-columns:repeat(4,minmax(0,1fr))}
 /* Ventana 2027 · Coming soon */
 .teaser-backdrop{position:fixed;inset:0;z-index:70;background:radial-gradient(120% 90% at 50% 0%,rgb(30 27 75 / .55),rgb(8 8 10 / .78));-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);opacity:0;transition:opacity .35s ease}
 .teaser-backdrop.open{opacity:1}
+[data-open-teaser][hidden]{display:none!important}
 .teaser-2027{position:fixed;z-index:71;inset:0;display:grid;place-items:center;padding:16px;pointer-events:none}
 .teaser-card{pointer-events:auto}
 .teaser-orbs{position:absolute;inset:0;overflow:hidden;pointer-events:none}
@@ -683,3 +731,23 @@ html.event-dia-madre body .product-tag.sale,html.event-fiestas-patrias body .pro
 .mishi-followups button{border:1px solid var(--line-2);background:var(--surface);color:var(--ink);border-radius:var(--r-pill);padding:7px 12px;font:500 12.5px var(--font-sans);cursor:pointer}
 .mishi-ai-badge{display:block;margin-top:6px;font-size:11px;color:var(--muted)}
 html body .auth-forgot{justify-self:end;margin:-4px 0 6px;font-size:12.5px}
+
+/* =====================================================================================================================
+   Quiénes somos: misión, visión y valores (portada, al final). Tarjetas Liquid Glass sobre un fondo suave con el acento.
+   ===================================================================================================================== */
+.about-band{scroll-margin-top:130px;position:relative;isolation:isolate;overflow:hidden;margin:clamp(28px,4vw,56px) clamp(8px,1.4vw,18px) 0;padding:clamp(32px,5vw,72px) clamp(18px,4.5vw,64px);border-radius:var(--r-xl);
+  background:radial-gradient(55% 75% at 10% 0%,color-mix(in srgb,var(--accent) 34%,transparent),transparent 70%),radial-gradient(45% 70% at 95% 100%,#c4b5fd55,transparent 70%),radial-gradient(40% 60% at 70% 10%,#7dd3fc33,transparent 70%),var(--surface-2)}
+.about-head{max-width:720px;margin:0 auto clamp(22px,3vw,36px);text-align:center}
+.about-head h2{margin:8px 0 12px;font-size:clamp(28px,4vw,44px);line-height:1.05}
+.about-head h2 em{font-family:var(--font-display);font-style:italic;font-weight:400;color:var(--accent)}
+.about-head p:not(.eyebrow){margin:0;color:var(--ink-2);font-size:clamp(15px,1.4vw,17px);line-height:1.6}
+.about-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--gap);max-width:1080px;margin:0 auto}
+.about-card{position:relative;padding:clamp(22px,3vw,34px);border-radius:var(--r-lg);color:var(--ink)}
+.about-card .eyebrow{margin:14px 0 4px}
+.about-card h3{margin:0 0 10px;font-size:clamp(20px,2vw,24px);letter-spacing:-.02em}
+.about-card p:not(.eyebrow){margin:0;color:var(--ink-2);line-height:1.65;font-size:15px}
+.about-icon{display:grid;place-items:center;width:46px;height:46px;border-radius:50%;background:var(--accent);color:var(--accent-ink);font-size:20px;box-shadow:inset 0 1px 0 rgb(255 255 255 / .35),0 8px 18px -8px var(--accent)}
+.about-values{list-style:none;display:flex;flex-wrap:wrap;justify-content:center;gap:10px;max-width:1080px;margin:clamp(20px,3vw,32px) auto 0;padding:0}
+.about-values li{padding:9px 16px;border-radius:var(--r-pill);background:rgb(255 255 255 / .55);border:1px solid rgb(255 255 255 / .7);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);font-size:13.5px;color:var(--ink-2)}
+.about-values b{color:var(--ink);font-weight:600}
+@media (max-width:760px){.about-grid{grid-template-columns:1fr}.about-values li{font-size:13px;padding:8px 14px}}
