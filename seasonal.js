@@ -36,15 +36,33 @@ window.MSJSeason = (() => {
       canvas.width = width * ratio; canvas.height = height * ratio;
       canvas.style.width = `${width}px`; canvas.style.height = `${height}px`;
       context.setTransform(ratio, 0, 0, ratio, 0, 0);
-      flakes = Array.from({length: count()}, () => ({x: Math.random() * width, y: Math.random() * height, r: .8 + Math.random() * 2.4, s: .25 + Math.random() * .7, d: Math.random() * Math.PI * 2}));
+      // Uno de cada 6 copos es un cristal de nieve de 6 brazos que gira despacio; el resto son puntos suaves.
+      flakes = Array.from({length: count()}, (_, index) => ({x: Math.random() * width, y: Math.random() * height, r: .8 + Math.random() * 2.4, s: .25 + Math.random() * .7, d: Math.random() * Math.PI * 2, crystal: index % 6 === 0, size: 5 + Math.random() * 4, a: Math.random() * Math.PI}));
+    }
+    // El fondo de la tienda es crema: los copos llevan un borde azul hielo para verse sobre fondo claro y oscuro.
+    // (En modo oscuro la página se invierte con un filtro, por eso ahí se pintan en tono oscuro.)
+    function crystal(flake, dark) {
+      context.save(); context.translate(flake.x, flake.y); context.rotate(flake.a);
+      context.strokeStyle = dark ? 'rgba(60,52,40,.55)' : 'rgba(150,178,212,.85)'; context.lineWidth = 1.2; context.lineCap = 'round';
+      for (let arm = 0; arm < 6; arm++) {
+        context.rotate(Math.PI / 3);
+        context.beginPath(); context.moveTo(0, 0); context.lineTo(0, -flake.size);
+        context.moveTo(0, -flake.size * .55); context.lineTo(-flake.size * .28, -flake.size * .8);
+        context.moveTo(0, -flake.size * .55); context.lineTo(flake.size * .28, -flake.size * .8); context.stroke();
+      }
+      context.restore();
     }
     function draw() {
       if (!running) return;
       context.clearRect(0, 0, width, height);
-      context.fillStyle = document.documentElement.classList.contains('msj-dark') ? 'rgba(40,40,40,.55)' : 'rgba(255,255,255,.85)';
+      const dark = document.documentElement.classList.contains('msj-dark');
       for (const flake of flakes) {
-        flake.y += flake.s; flake.d += .01; flake.x += Math.sin(flake.d) * .35;
-        if (flake.y > height + 4) { flake.y = -4; flake.x = Math.random() * width; }
+        flake.y += flake.s; flake.d += .01; flake.x += Math.sin(flake.d) * .35; flake.a += .004;
+        if (flake.y > height + 10) { flake.y = -10; flake.x = Math.random() * width; }
+        if (flake.crystal) { crystal(flake, dark); continue; }
+        context.fillStyle = dark ? 'rgba(60,52,40,.5)' : 'rgba(160,186,218,.6)';
+        context.beginPath(); context.arc(flake.x, flake.y, flake.r + .6, 0, Math.PI * 2); context.fill();
+        context.fillStyle = dark ? 'rgba(40,34,26,.6)' : 'rgba(255,255,255,.95)';
         context.beginPath(); context.arc(flake.x, flake.y, flake.r, 0, Math.PI * 2); context.fill();
       }
       frame = requestAnimationFrame(draw);
@@ -106,8 +124,9 @@ window.MSJSeason = (() => {
     if (document.querySelector('.season-lights') || !festiveAllowed()) return;
     const header = document.querySelector('.shop-topbar');
     if (!header) return;
-    const colors = ['#e63946', '#f4d35e', '#2a9d8f', '#f1faee', '#e76f51'];
-    header.insertAdjacentHTML('beforeend', `<div class="season-lights" aria-hidden="true">${Array.from({length: 42}, (_, index) => `<i style="--c:${colors[index % colors.length]};--d:${(index % 7) * .35}s"></i>`).join('')}</div>`);
+    // Paleta cálida (rojo, dorado, verde pino, blanco cálido) y encendido en cadena: cada foco se enciende un poco después del anterior.
+    const colors = ['#e11d48', '#f4c542', '#16a34a', '#fff1c1'];
+    header.insertAdjacentHTML('beforeend', `<div class="season-lights" aria-hidden="true">${Array.from({length: 42}, (_, index) => `<i style="--c:${colors[index % colors.length]};--d:${(index % 8) * .3}s"></i>`).join('')}</div>`);
   }
 
   // ---------- Ventana «2027 · Coming soon» ----------

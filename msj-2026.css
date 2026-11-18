@@ -959,3 +959,57 @@ html body[data-page="season"] .product-card:not(.on-sale):hover .product-photo{b
 @media (prefers-reduced-motion:reduce){.season-hero::before,html body .season-copy h2{animation:none}}
 @media (max-width:640px){.season-hero::before{width:120px;right:10px}html body .x-wrap-banner::before{display:none}html body[data-page="season"] :is(#gift-guide,.x-section,.packs-section){margin-inline:10px;padding:16px}}
 html body .season-copy h2{padding-bottom:.12em;margin-bottom:-.06em}
+
+/* ===== Tema navideño de toda la tienda (2026-11-18) — solo con html.season-christmas (se apaga en MSJ Studio) ===== */
+/* Guirnalda: cable verde, focos con casquillo dorado, brillo y encendido en cadena */
+html.season-christmas .season-lights{height:26px;bottom:-16px;
+  background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='20' viewBox='0 0 80 20'%3E%3Cpath d='M0 3 Q20 14 40 3 T80 3' fill='none' stroke='%231f4d33' stroke-width='1.6'/%3E%3C/svg%3E") repeat-x 0 0/80px 20px}
+html.season-christmas .season-lights i{position:relative;width:9px;height:13px;margin-top:9px;border-radius:50% 50% 50% 50% / 58% 58% 42% 42%;
+  background:radial-gradient(circle at 35% 30%,#fff 0 12%,var(--c) 45%,color-mix(in srgb,var(--c) 70%,#000) 100%);
+  box-shadow:0 0 6px 2px color-mix(in srgb,var(--c) 75%,transparent),0 0 16px 4px color-mix(in srgb,var(--c) 35%,transparent);
+  animation:xmasBulb 2.4s ease-in-out infinite;animation-delay:var(--d);opacity:1}
+html.season-christmas .season-lights i::before{content:"";position:absolute;top:-4px;left:50%;width:6px;height:5px;transform:translateX(-50%);border-radius:2px 2px 1px 1px;background:linear-gradient(90deg,#9a7a2c,#e8c66a,#9a7a2c)}
+@keyframes xmasBulb{0%,100%{opacity:1;filter:brightness(1.1)}45%{opacity:.45;filter:brightness(.7);box-shadow:0 0 2px 0 color-mix(in srgb,var(--c) 40%,transparent)}}
+
+/* Franja de anuncios: brillos dorados que pasan despacio */
+html:is(.event-navidad,.event-navidad-season).season-christmas body .announcement{position:relative;overflow:hidden}
+html:is(.event-navidad,.event-navidad-season).season-christmas body .announcement::after{content:"";position:absolute;inset:0;pointer-events:none;
+  background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='34'%3E%3Cg fill='%23fde68a'%3E%3Cpath d='M12 8l1.2 2.8L16 12l-2.8 1.2L12 16l-1.2-2.8L8 12l2.8-1.2z' fill-opacity='.55'/%3E%3Ccircle cx='70' cy='24' r='1.3' fill-opacity='.6'/%3E%3Cpath d='M98 4l.8 1.8 1.8.8-1.8.8-.8 1.8-.8-1.8-1.8-.8 1.8-.8z' fill-opacity='.45'/%3E%3C/g%3E%3C/svg%3E") repeat-x 0 50%/120px 34px;
+  animation:xmasDrift 30s linear infinite}
+@keyframes xmasDrift{to{background-position:240px 50%}}
+
+/* Logo: ramito de acebo (dos hojas y tres bayas) junto a «MSJ» */
+html.season-christmas .shop-topbar .wordmark{position:relative}
+html.season-christmas .shop-topbar .wordmark::after{content:"";position:absolute;top:-1px;right:-19px;width:22px;height:18px;pointer-events:none;transform:rotate(14deg);
+  background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 44 36'%3E%3Cpath d='M22 22C14 26 4 24 1 16c5 1 7-3 11-2-1-4 3-6 4-10 3 6 7 9 6 18z' fill='%23157a45'/%3E%3Cpath d='M22 22c8 4 18 2 21-6-5 1-7-3-11-2 1-4-3-6-4-10-3 6-7 9-6 18z' fill='%230f5c34'/%3E%3Cpath d='M22 22L12 12M22 22l10-10' stroke='%230b3a22' stroke-width='1'/%3E%3Ccircle cx='18' cy='25' r='4.2' fill='%23d62839'/%3E%3Ccircle cx='26' cy='25' r='4.2' fill='%23c8102e'/%3E%3Ccircle cx='22' cy='30' r='4.2' fill='%23e63946'/%3E%3Cg fill='%23fff' fill-opacity='.7'%3E%3Ccircle cx='16.8' cy='23.8' r='1.1'/%3E%3Ccircle cx='24.8' cy='23.8' r='1.1'/%3E%3Ccircle cx='20.8' cy='28.8' r='1.1'/%3E%3C/g%3E%3C/svg%3E") no-repeat center/contain}
+
+/* Bolsa: contador rojo navideño con un brillo suave */
+html.season-christmas:not(.studio-accent-custom) .bag-count{background:#c8102e!important;color:#fff!important;box-shadow:0 0 0 2px #fff,0 0 10px rgb(200 16 46 / .55)}
+
+/* Productos en toda la tienda: al pasar el mouse, aro dorado de regalo (las ofertas mantienen su aro rojo) */
+html.season-christmas .product-card:not(.on-sale):hover .product-photo{box-shadow:0 0 0 2px rgb(212 167 68 / .75),0 16px 32px -20px rgb(15 46 31 / .55)}
+
+
+/* Pie de página: borde de nieve y guirnalda de luces */
+html.season-christmas body .site-footer{position:relative;margin-top:56px}
+html.season-christmas body .site-footer::before{content:"";position:absolute;left:0;right:0;top:-22px;height:30px;pointer-events:none;border-radius:var(--r-xl) var(--r-xl) 0 0;
+  background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='30' viewBox='0 0 120 30'%3E%3Cpath d='M0 30V18c10-10 20-12 30-6s20 2 30-4 20-6 30 2 20 6 30-2v22z' fill='%23ffffff'/%3E%3Cpath d='M0 18c10-10 20-12 30-6s20 2 30-4 20-6 30 2 20 6 30-2' fill='none' stroke='%23dbe4ee' stroke-width='1.2'/%3E%3C/svg%3E") repeat-x 0 100%/120px 30px;
+  filter:drop-shadow(0 -2px 4px rgb(15 46 31 / .12))}
+html.season-christmas body .site-footer::after{content:"";position:absolute;left:4%;right:4%;top:6px;height:16px;pointer-events:none;opacity:.9;
+  background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='96' height='16' viewBox='0 0 96 16'%3E%3Cpath d='M0 2 Q24 10 48 2 T96 2' fill='none' stroke='%23e0b54b' stroke-opacity='.55'/%3E%3Ccircle cx='12' cy='7' r='2.4' fill='%23e11d48'/%3E%3Ccircle cx='36' cy='7' r='2.4' fill='%23f4c542'/%3E%3Ccircle cx='60' cy='7' r='2.4' fill='%2316a34a'/%3E%3Ccircle cx='84' cy='7' r='2.4' fill='%23fff1c1'/%3E%3C/svg%3E") repeat-x 0 0/96px 16px}
+html.season-christmas body .site-footer h2::before{content:"\2744";margin-right:6px;color:#9fb8d6;font-size:.9em}
+
+/* Botones principales: brillo suave al pasar el mouse (sin cambiar los colores de la tienda) */
+html.season-christmas body .primary-button{position:relative;overflow:hidden}
+html.season-christmas body .primary-button::after{content:"";position:absolute;top:0;bottom:0;left:-60%;width:40%;background:linear-gradient(100deg,transparent,rgb(255 255 255 / .28),transparent);transform:skewX(-18deg);transition:left .7s ease;pointer-events:none}
+html.season-christmas body .primary-button:hover::after{left:130%}
+
+/* Modo oscuro (la página se invierte): la nieve del pie y el acebo conservan sus colores reales */
+html.msj-dark.season-christmas .shop-topbar .wordmark::after{filter:invert(1) hue-rotate(180deg)}
+@media (prefers-reduced-motion:reduce){html.season-christmas .season-lights i,html:is(.event-navidad,.event-navidad-season).season-christmas body .announcement::after{animation:none}}
+@media (max-width:760px){html.season-christmas .shop-topbar .wordmark::after{width:18px;height:15px;right:-14px;top:-6px}html.season-christmas body .site-footer::after{display:none}}
+/* Nieve acumulada sobre el borde superior del pie (blanco sobre oscuro) y guirnalda debajo */
+html.season-christmas body .site-footer{margin-top:24px;padding-top:56px}
+html.season-christmas body .site-footer::before{top:0;height:22px;filter:none;border-radius:var(--r-xl) var(--r-xl) 0 0;
+  background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='22' viewBox='0 0 120 22'%3E%3Cpath d='M0 0H120V9c-5 7-10 9-14 3s-9-6-13 1-11 9-16 2-9-9-15-3-11 10-17 3-10-7-15-2-9 6-14 1-6-5-16-3z' fill='%23f8fafc'/%3E%3C/svg%3E") repeat-x 0 0/120px 22px}
+html.season-christmas body .site-footer::after{top:26px}
