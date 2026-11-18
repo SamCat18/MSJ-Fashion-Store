@@ -824,3 +824,17 @@ html body .product-card .product-price .save-chip::before{content:'';flex:none;w
 @keyframes msjSaleShine{0%,55%{left:-60%}80%,100%{left:130%}}
 @keyframes msjSaleDot{0%,100%{box-shadow:0 0 0 2px rgb(226 85 63 / .25)}50%{box-shadow:0 0 0 6px rgb(226 85 63 / 0)}}
 @media (max-width:760px){html body .product-tag.sale{font-size:11.5px!important;padding:6px 10px!important}html body .product-card .product-price .save-chip{font-size:10.5px}}
+
+/* ===== Portada más limpia (2026-11-18) ===== */
+/* Franja "Pago seguro / Datos protegidos…": separada del club VIP y con tarjetas alineadas */
+html body .trust-band{background:transparent;gap:14px;margin:clamp(28px,4vw,48px) auto 0;padding:0 var(--pad-x,3.2%);border:0}
+html body .trust-band>div{padding:20px 22px!important;border:1px solid var(--line)!important;display:flex;flex-direction:column;gap:6px}
+html body .trust-band strong{font-family:var(--font-sans);font-weight:600;font-size:14.5px;letter-spacing:-.01em}
+html body .trust-band span{font-size:13px;line-height:1.5;color:var(--muted)}
+/* Botón claro para seguir al catálogo completo */
+html body .grid-more{display:flex;justify-content:center;margin:clamp(22px,3vw,34px) 0 0}
+html body .grid-more .hero-link{min-width:240px;justify-content:center}
+/* Encabezado de "Productos destacados" igual al resto de secciones */
+html body .collection .section-heading h2{text-transform:none}
+/* Carruseles en celular: tarjetas separadas (antes se montaban por un ancho mínimo de 190px) */
+@media (max-width:760px){html body .rail-track{gap:12px}html body .rail-track .product-card{min-width:0}}
