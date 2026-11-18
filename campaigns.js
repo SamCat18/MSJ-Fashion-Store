@@ -1,11 +1,18 @@
-// Campañas de MSJ: promociones por feriados peruanos (2x1 o %), modo Blanco y Negro y franja de anuncios.
-// El calendario de respaldo debe coincidir con la tabla public.promotions de database/campaigns.sql: el descuento real lo calcula
-// checkout_cart en el servidor; aquí solo se muestra al cliente antes de pagar.
+// Campañas de MSJ: promociones por feriados y campañas del informe de precios (2da al 50%, 3x2, %, packs), modo Blanco y Negro y franja de anuncios.
+// El calendario de respaldo debe coincidir con las tablas public.promotions y public.campaign_rules (database/promociones-informe.sql):
+// el descuento real lo calcula checkout_cart en el servidor; aquí solo se muestra al cliente antes de pagar.
+// kind: '2x1' · '2da50' (2da unidad al 50%) · '3x2' · 'percent' = promoción de toda la tienda (una a la vez);
+//       'campaña' = campaña con descuentos por producto, envío gratis o regalo (vienen de campaign_rules y pueden coincidir con otra).
 window.MSJCampaigns = (() => {
   const calendar = [
     {code:'SEMANA-CRIOLLA',name:'Semana Criolla 2x1',tagline:'Día de la Canción Criolla y Todos los Santos: lleva 2 y paga 1 en polos, poleras, camisas, blusas y gorras.',kind:'2x1',discount_value:0,category_slugs:['polos','poleras','camisas','blusas','gorras'],theme:null,starts_at:'2026-10-28T00:00:00-05:00',ends_at:'2026-11-02T00:00:00-05:00'},
-    {code:'BLACK-FRIDAY',name:'Black & White Friday',tagline:'La tienda se viste de blanco y negro: 2x1 en polos, jeans, joggers y zapatillas.',kind:'2x1',discount_value:0,category_slugs:['polos','poleras','jeans','pantalones','joggers','zapatillas'],theme:'bw',starts_at:'2026-11-27T00:00:00-05:00',ends_at:'2026-12-01T00:00:00-05:00'},
-    {code:'NAVIDAD',name:'Navidad MSJ 2x1',tagline:'Regalos para dos al precio de uno: perfumes, relojes, lentes y joyería.',kind:'2x1',discount_value:0,category_slugs:['perfumes','relojes','lentes','joyeria'],theme:null,starts_at:'2026-12-18T00:00:00-05:00',ends_at:'2026-12-25T00:00:00-05:00'},
+    {code:'FIN-TEMPORADA-FRIA',name:'Fin de temporada fría',tagline:'Liquidación de abrigo: 20% en la Chaqueta Norte y la Chompa de punto. El 26 de noviembre, relámpago de 24 horas: Chaqueta Norte a −30%.',kind:'campaña',headline:'Hasta −30%',discount_value:0,category_slugs:null,product_slugs:['chaqueta-norte','chompa-suave'],theme:null,starts_at:'2026-11-19T00:00:00-05:00',ends_at:'2026-12-01T00:00:00-05:00',conditions:'Del 19 al 30 de noviembre de 2026; solo stock de temporada fría. Relámpago: solo el 26 de noviembre (24 horas), máximo dos por cliente.'},
+    {code:'BLACK-FRIDAY',name:'Black & White Friday',tagline:'La tienda se viste de blanco y negro: la 2da unidad al 50% en polos, poleras, jeans, pantalones, joggers y zapatillas.',kind:'2da50',discount_value:0,category_slugs:['polos','poleras','jeans','pantalones','joggers','zapatillas'],theme:'bw',starts_at:'2026-11-27T00:00:00-05:00',ends_at:'2026-12-01T00:00:00-05:00',conditions:'El 50% se aplica a la unidad de menor precio de cada par. Hasta agotar stock. No se acumula con el precio de socio VIP: se aplica el mejor.'},
+    {code:'ENVIO-DICIEMBRE',name:'Envío gratis en diciembre',tagline:'Todo diciembre, envío gratis a todo el Perú en pedidos desde S/ 150.',kind:'campaña',headline:'Envío gratis',discount_value:0,category_slugs:null,theme:null,starts_at:'2026-12-01T00:00:00-05:00',ends_at:'2027-01-01T00:00:00-05:00',conditions:'Pedidos desde S/ 150 (después de descuentos) del 1 al 31 de diciembre de 2026; un envío gratis por pedido.'},
+    {code:'CYBER-MSJ',name:'Cyber MSJ',tagline:'Hasta 15% en camisas, polos, pantalones, zapatillas y mochilas, y la 2da Camisa Nube al 50%.',kind:'2da50',headline:'Hasta −15%',discount_value:0,category_slugs:null,product_slugs:['camisa-nube'],theme:null,starts_at:'2026-12-02T00:00:00-05:00',ends_at:'2026-12-09T00:00:00-05:00',conditions:'Del 2 al 8 de diciembre de 2026; hasta agotar stock. El 50% se aplica a la segunda Camisa Nube; tallas S a XL.'},
+    {code:'PREVIA-NAVIDAD',name:'Previa Navidad',tagline:'15% en cinturón, collar, bolso, vestido elegante y tacones, 10% en el Perfume Aqua Fresh y una Gorra MSJ Classic de regalo con el Perfume Oud Night.',kind:'campaña',headline:'−15% + regalo',discount_value:0,category_slugs:null,theme:null,starts_at:'2026-12-09T00:00:00-05:00',ends_at:'2026-12-18T00:00:00-05:00',conditions:'Del 9 al 17 de diciembre de 2026; hasta agotar stock. Regalo: hasta agotar 30 gorras; la gorra no se cambia por dinero.'},
+    {code:'NAVIDAD',name:'Navidad MSJ',tagline:'Regalos para dos: la 2da unidad al 50% en perfumes, relojes, lentes y joyería.',kind:'2da50',discount_value:0,category_slugs:['perfumes','relojes','lentes','joyeria'],theme:null,starts_at:'2026-12-18T00:00:00-05:00',ends_at:'2026-12-25T00:00:00-05:00',conditions:'El 50% se aplica a la unidad de menor precio de cada par. Hasta agotar stock.'},
+    {code:'VERANO-MSJ',name:'Verano MSJ',tagline:'10% en el Vestido Brisa, los Lentes de sol y la Gorra Classic, y el Top Alba en 3x2.',kind:'3x2',headline:'3x2 + −10%',discount_value:0,category_slugs:null,product_slugs:['top-alba'],theme:null,starts_at:'2027-01-02T00:00:00-05:00',ends_at:'2027-01-16T00:00:00-05:00',conditions:'Del 2 al 15 de enero de 2027; hasta agotar stock. 3x2: lleva tres Top Alba y paga dos (sale gratis el de menor precio); tallas XS a L.'},
     {code:'DIA-MADRE',name:'Día de la Madre',tagline:'20% en vestidos, blusas, bolsos y perfumes.',kind:'percent',discount_value:20,category_slugs:['vestidos','blusas','bolsos','perfumes'],theme:null,starts_at:'2027-05-03T00:00:00-05:00',ends_at:'2027-05-10T00:00:00-05:00'},
     {code:'FIESTAS-PATRIAS',name:'Fiestas Patrias',tagline:'28% por el 28 de julio en toda la tienda.',kind:'percent',discount_value:28,category_slugs:null,theme:null,starts_at:'2027-07-25T00:00:00-05:00',ends_at:'2027-07-30T00:00:00-05:00'}
   ];
@@ -14,15 +21,20 @@ window.MSJCampaigns = (() => {
   const money = value => new Intl.NumberFormat('es-PE',{style:'currency',currency:'PEN'}).format(Number(value||0));
   // ?promo=BLACK-FRIDAY permite mostrar al jurado cualquier campaña del calendario sin esperar la fecha (solo visual; el servidor manda).
   const preview = new URLSearchParams(location.search).get('promo');
-  let active = calendar.find(promo => promo.code === String(preview||'').toUpperCase()) || current(calendar);
+  // Solo las promociones de toda la tienda pueden estar «activas»; las campañas por producto llegan como descuentos (campaign_rules).
+  const storeWide = promo => promo && promo.kind !== 'campaña';
+  let active = calendar.find(promo => storeWide(promo) && promo.code === String(preview||'').toUpperCase()) || current(calendar);
   let timer = 0;
 
-  function current(list){const now=Date.now();return list.find(promo=>now>=Date.parse(promo.starts_at)&&now<Date.parse(promo.ends_at))||null}
+  function current(list){const now=Date.now();return list.find(promo=>storeWide(promo)&&now>=Date.parse(promo.starts_at)&&now<Date.parse(promo.ends_at))||null}
   function upcoming(){const now=Date.now();return calendar.filter(promo=>Date.parse(promo.starts_at)>now).sort((a,b)=>Date.parse(a.starts_at)-Date.parse(b.starts_at))[0]||null}
-  function eligible(product,promo=active){return Boolean(promo&&(!promo.category_slugs||promo.category_slugs.includes(product?.category_slug||product?.category)))}
-  // Igual que checkout_cart: unidades participantes de mayor a menor; en 2x1 sale gratis la segunda de cada par.
-  function discount(lines,promo=active){if(!promo)return {amount:0,promo:null,units:0};const units=[];lines.forEach(line=>{if(eligible(line,promo))for(let i=0;i<line.quantity;i++)units.push(Number(line.price))});units.sort((a,b)=>b-a);const raw=promo.kind==='2x1'?units.filter((_,index)=>index%2===1).reduce((sum,value)=>sum+value,0):units.reduce((sum,value)=>sum+value,0)*Number(promo.discount_value)/100;return {amount:Math.round((raw+Number.EPSILON)*100)/100,promo,units:units.length}}
-  function badge(product){if(!eligible(product))return'';return `<span class="promo-flag">${active.kind==='2x1'?'2x1':`-${Number(active.discount_value)}%`}</span>`}
+  // Participa si la promoción es de toda la tienda o si el producto está en sus categorías o en su lista de productos.
+  function eligible(product,promo=active){if(!storeWide(promo))return false;const cats=promo.category_slugs,items=promo.product_slugs;if(!cats&&!items)return true;return Boolean((cats&&cats.includes(product?.category_slug||product?.category))||(items&&items.includes(product?.slug)))}
+  // Igual que cart_promotions en el servidor: unidades participantes de mayor a menor precio;
+  // 2x1: gratis la 2da de cada par · 2da50: la 2da de cada par al 50% · 3x2: gratis la 3ra de cada trío · percent: % sobre todas.
+  function discount(lines,promo=active){if(!storeWide(promo))return {amount:0,promo:null,units:0};const units=[];lines.forEach(line=>{if(eligible(line,promo))for(let i=0;i<line.quantity;i++)units.push(Number(line.price))});units.sort((a,b)=>b-a);const every=step=>units.filter((_,index)=>(index+1)%step===0).reduce((sum,value)=>sum+value,0);const round=value=>Math.round((value+Number.EPSILON)*100)/100;const raw=promo.kind==='2x1'?every(2):promo.kind==='2da50'?round(every(2)*0.5):promo.kind==='3x2'?every(3):round(units.reduce((sum,value)=>sum+value,0)*Number(promo.discount_value)/100);return {amount:round(raw),promo,units:units.length}}
+  function label(promo){if(!promo)return'';if(promo.headline)return promo.headline;return promo.kind==='2x1'?'2x1':promo.kind==='2da50'?'2da al 50%':promo.kind==='3x2'?'3x2':`−${Number(promo.discount_value)}%`}
+  function badge(product){if(!eligible(product))return'';const text=active.kind==='2da50'?'2da al 50%':active.kind==='3x2'?'3x2':active.kind==='2x1'?'2x1':`-${Number(active.discount_value)}%`;return `<span class="promo-flag">${text}</span>`}
   function countdown(target){const ms=Math.max(0,Date.parse(target)-Date.now());const days=Math.floor(ms/864e5),hours=Math.floor(ms%864e5/36e5),minutes=Math.floor(ms%36e5/6e4),seconds=Math.floor(ms%6e4/1e3);return days?`${days}d ${hours}h ${minutes}m`:`${hours}h ${minutes}m ${String(seconds).padStart(2,'0')}s`}
 
   function storedTheme(){try{return localStorage.getItem(themeKey)}catch{return null}}
@@ -35,7 +47,7 @@ window.MSJCampaigns = (() => {
   function setTheme(mode){try{localStorage.setItem(themeKey,mode)}catch{}const root=document.documentElement;root.classList.add('theme-switching');applyTheme();setTimeout(()=>root.classList.remove('theme-switching'),450)}
   function themeMenu(open){const button=document.getElementById('theme-toggle'),menu=document.getElementById('theme-menu');if(!button||!menu)return;menu.hidden=!open;button.setAttribute('aria-expanded',String(open));if(open)menu.querySelector('[aria-checked="true"]')?.focus()}
 
-  function renderAnnouncement(){const bar=document.querySelector('.announcement');if(!bar)return;clearInterval(timer);const next=upcoming();const cause=window.STORE_CONFIG?.donation;const causeText=cause?` <span>•</span> 1% DE CADA COMPRA PARA LAS ${escape(cause.cause).toUpperCase()}`:'';if(active){const paint=()=>{bar.innerHTML=`<strong>✦ ${escape(active.name).toUpperCase()}</strong> <span>•</span> ${active.kind==='2x1'?'LLEVA 2, PAGA 1':`${Number(active.discount_value)}% DE DESCUENTO`} <span>•</span> TERMINA EN <strong class="promo-clock">${countdown(active.ends_at)}</strong>${causeText}`};paint();timer=setInterval(paint,1000);bar.classList.add('promo-live');return}bar.classList.remove('promo-live');if(next)bar.innerHTML=`ENVÍOS A TODO EL PERÚ <span>•</span> PRÓXIMA CAMPAÑA: <strong>${escape(next.name).toUpperCase()}</strong> EN ${countdown(next.starts_at)}${causeText}`}
+  function renderAnnouncement(){const bar=document.querySelector('.announcement');if(!bar)return;clearInterval(timer);const next=upcoming();const cause=window.STORE_CONFIG?.donation;const causeText=cause?` <span>•</span> 1% DE CADA COMPRA PARA LAS ${escape(cause.cause).toUpperCase()}`:'';if(active){const paint=()=>{bar.innerHTML=`<strong>✦ ${escape(active.name).toUpperCase()}</strong> <span>•</span> ${active.kind==='2x1'?'LLEVA 2, PAGA 1':active.kind==='2da50'?'LA 2DA UNIDAD AL 50%':active.kind==='3x2'?'LLEVA 3, PAGA 2':`${Number(active.discount_value)}% DE DESCUENTO`} <span>•</span> TERMINA EN <strong class="promo-clock">${countdown(active.ends_at)}</strong>${causeText}`};paint();timer=setInterval(paint,1000);bar.classList.add('promo-live');return}bar.classList.remove('promo-live');if(next)bar.innerHTML=`ENVÍOS A TODO EL PERÚ <span>•</span> PRÓXIMA CAMPAÑA: <strong>${escape(next.name).toUpperCase()}</strong> EN ${countdown(next.starts_at)}${causeText}`}
 
   function setActive(promo){if(preview)return;active=promo&&promo.code?promo:null;applyTheme();renderAnnouncement();document.dispatchEvent(new CustomEvent('msj:promo'))}
 
@@ -50,7 +62,7 @@ window.MSJCampaigns = (() => {
   addEventListener('storage',event=>{if(event.key===themeKey)applyTheme()});
   applyTheme();renderAnnouncement();
 
-  return {get active(){return active},calendar,upcoming,eligible,discount,badge,setActive,countdown,money};
+  return {get active(){return active},calendar,upcoming,eligible,discount,badge,label,setActive,countdown,money};
 })();
 
 // Mapa de seguimiento: silueta simplificada del Perú (lon/lat aproximados) con la ruta desde el almacén de Lima hasta la ciudad del pedido.

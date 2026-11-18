@@ -1045,6 +1045,8 @@ revoke all on function public.marcar_comprobante_enviado(uuid,text) from public,
 grant execute on function public.marcar_comprobante_enviado(uuid,text) to authenticated,service_role;
 
 -- ---------- Checkout: igual que campaigns.sql + Mercado Pago (solo si la integración está activa) ----------
+-- Packs, campañas y regalo del informe de precios: requiere database/promociones-informe.sql.
+do $$ begin if to_regprocedure('public.cart_promotions(jsonb)') is null then raise exception 'Ejecuta primero database/promociones-informe.sql'; end if; end $$;
 create or replace function public.checkout_cart(p_items jsonb,p_payment_method text,p_address jsonb,p_coupon text default null,p_donation numeric default 0,p_yape_operation text default null,p_donation_cause text default null)
 returns uuid language plpgsql security definer set search_path = '' as $$
 declare
@@ -1058,6 +1060,8 @@ declare
   v_donation numeric(10,2) := round(coalesce(p_donation,0),2); v_yape text := nullif(regexp_replace(coalesce(p_yape_operation,''),'\D','','g'),'');
   v_total numeric(10,2); v_mp boolean := p_payment_method = 'mercado_pago';
   v_mp_minutes integer := greatest(30,least(coalesce((public.setting('automation') ->> 'mp_payment_minutes')::integer,120),2880));
+  -- Informe de precios: packs, campañas con fecha, envío gratis y regalo con compra.
+  v_slug text; v_slugs text[] := '{}'; v_units_json jsonb := '[]'::jsonb; v_promo_result jsonb; v_pack_amount numeric(10,2) := 0; v_free_from numeric;
 begin
   if v_user_id is null then raise exception 'Inicia sesión para crear un pedido.'; end if;
   if not public.is_active_user() then raise exception 'La cuenta está deshabilitada.'; end if;
@@ -1081,25 +1085,24 @@ begin
   for v_item in select value from jsonb_array_elements(p_items) loop
     v_variant_id := (v_item ->> 'variant_id')::uuid; v_quantity := (v_item ->> 'quantity')::integer;
     if v_quantity is null or v_quantity < 1 or v_quantity > 20 then raise exception 'Cantidad invalida.'; end if;
-    select coalesce(v.price,p.price),p.discount_percent,v.stock,p.name,v.size,v.color,p.vip_only,c.slug into v_price,v_discount,v_stock,v_product_name,v_size,v_color,v_vip_only,v_category
+    select coalesce(v.price,p.price),p.discount_percent,v.stock,p.name,v.size,v.color,p.vip_only,c.slug,p.slug into v_price,v_discount,v_stock,v_product_name,v_size,v_color,v_vip_only,v_category,v_slug
       from public.product_variants v join public.products p on p.id = v.product_id left join public.categories c on c.id = p.category_id
       where v.id = v_variant_id and v.is_active and p.is_active for update of v;
     if not found then raise exception 'Variante no disponible.'; end if;
+    v_discount := greatest(v_discount,public.campaign_discount(v_slug));
     if v_vip_only and v_vip_pct = 0 then raise exception '% es exclusiva para socios MSJ Privilège.',v_product_name; end if;
     if v_stock < v_quantity then raise exception 'Stock insuficiente para %.',v_product_name; end if;
     v_public_price := round(v_price * (1 - v_discount / 100),2);
     v_price := round(v_price * (1 - greatest(v_discount,v_vip_pct) / 100),2);
     v_vip_saving := v_vip_saving + ((v_public_price - v_price) * v_quantity);
     v_subtotal := v_subtotal + (v_price * v_quantity);
-    if v_promo.id is not null and (v_promo.category_slugs is null or v_category = any(v_promo.category_slugs)) then
-      v_units := v_units || array_fill(v_price,array[v_quantity]);
-    end if;
+    -- Cada unidad pasa a cart_promotions (packs y promoción del día) con su producto, categoría y precio ya rebajado.
+    v_units_json := v_units_json || (select jsonb_agg(jsonb_build_object('slug',v_slug,'category',v_category,'price',v_price)) from generate_series(1,v_quantity));
+    v_slugs := v_slugs || v_slug;
   end loop;
-  if v_promo.kind = '2x1' then
-    select coalesce(sum(u),0) into v_promo_amount from (select u,row_number() over (order by u desc) as n from unnest(v_units) as u) s where n % 2 = 0;
-  elsif v_promo.kind = 'percent' then
-    select round(coalesce(sum(u),0) * v_promo.discount_value / 100,2) into v_promo_amount from unnest(v_units) as u;
-  end if;
+  v_promo_result := public.cart_promotions(v_units_json);
+  v_pack_amount := (v_promo_result ->> 'pack_amount')::numeric;
+  v_promo_amount := (v_promo_result ->> 'promo_amount')::numeric + v_pack_amount;
   if nullif(p_address ->> 'zone_id','') is not null then
     select * into v_zone from public.shipping_zones where id = (p_address ->> 'zone_id')::uuid and is_active;
     if not found then raise exception 'La zona de envío no está disponible.'; end if;
@@ -1124,24 +1127,29 @@ begin
     v_shipping := case when v_vip_level = 'black' or (v_vip_level = 'gold' and v_zone.vip_gold_free) then 0
       when v_zone.free_from is not null and (v_subtotal - v_promo_amount - v_discount_amount) >= v_zone.free_from then 0 else v_zone.cost end;
   end if;
+  -- Campaña «Envío gratis desde S/ X»: baja el mínimo en todas las zonas mientras esté vigente.
+  v_free_from := public.campaign_free_shipping_from();
+  if v_zone.id is not null and v_free_from is not null and (v_subtotal - v_promo_amount - v_discount_amount) >= v_free_from then v_shipping := 0; end if;
   v_total := v_subtotal - v_promo_amount - v_discount_amount + v_shipping + v_donation;
   perform set_config('msj.stock_reason','venta',true);
   insert into public.orders (id,user_id,payment_method,payment_status,recipient,shipping_address,city,phone,subtotal,discount_amount,coupon_code,shipping_zone_id,shipping_amount,total,nivel_vip,vip_discount_amount,promo_code,promo_discount_amount,donation_amount,yape_operation,donation_cause,payment_expires_at)
   values (v_order_id,v_user_id,p_payment_method,case when p_payment_method in ('yape','lemon','mercado_pago') then 'pending' else 'unpaid' end,p_address ->> 'recipient',p_address ->> 'address',p_address ->> 'city',coalesce(p_address ->> 'phone',''),
-    v_subtotal,v_discount_amount,v_code,v_zone.id,v_shipping,v_total,v_vip_level,v_vip_saving,case when v_promo_amount > 0 then v_promo.code end,v_promo_amount,v_donation,v_yape,case when v_donation > 0 then coalesce(p_donation_cause,'el-nino') end,
+    v_subtotal,v_discount_amount,v_code,v_zone.id,v_shipping,v_total,v_vip_level,v_vip_saving,nullif(concat_ws('+',v_promo_result ->> 'promo_code',case when v_pack_amount > 0 then 'PACK' end),''),v_promo_amount,v_donation,v_yape,case when v_donation > 0 then coalesce(p_donation_cause,'el-nino') end,
     case when v_mp then now() + make_interval(mins => v_mp_minutes) end);
   if p_payment_method in ('yape','lemon') then
     insert into public.payments (order_id,provider,provider_reference,amount,status) values (v_order_id,p_payment_method,v_yape,v_total,'pending');
   end if;
   for v_item in select value from jsonb_array_elements(p_items) loop
     v_variant_id := (v_item ->> 'variant_id')::uuid; v_quantity := (v_item ->> 'quantity')::integer;
-    select coalesce(v.price,p.price),p.discount_percent,p.name,v.size,v.color into v_price,v_discount,v_product_name,v_size,v_color
+    select coalesce(v.price,p.price),p.discount_percent,p.name,v.size,v.color,p.slug into v_price,v_discount,v_product_name,v_size,v_color,v_slug
       from public.product_variants v join public.products p on p.id = v.product_id where v.id = v_variant_id;
+    v_discount := greatest(v_discount,public.campaign_discount(v_slug));
     v_price := round(v_price * (1 - greatest(v_discount,v_vip_pct) / 100),2);
     insert into public.order_items (order_id,variant_id,product_name,variant_label,unit_price,quantity)
     values (v_order_id,v_variant_id,v_product_name,v_size || ' / ' || v_color,v_price,v_quantity);
     update public.product_variants set stock = stock - v_quantity where id = v_variant_id;
   end loop;
+  perform public.apply_campaign_gifts(v_order_id,v_slugs);
   return v_order_id;
 end;
 $$;
